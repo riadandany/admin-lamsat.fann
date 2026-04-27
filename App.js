@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import "@/App.css";
+import "./App.css"; // تأكد أن المسار هكذا وليس @/App.css
 import axios from "axios";
 
-const BACKEND_URL =  "https://pntqobqhaggvcjtyspvb.supabase.co";
-const API = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBudHFvYnFoYWdndmNqdHlzcHZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjYwNjQsImV4cCI6MjA5MTUwMjA2NH0.fdl8d8I0UoDyWGDPK0VNUZBaEBQD4cz-ReowhbtxH0k";
+// بيانات سيرفرك أنت فقط
+const SUPABASE_URL = "https://pntqobqhaggvcjtyspvb.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBudHFvYnFoYWdndmNqdHlzcHZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjYwNjQsImV4cCI6MjA5MTUwMjA2NH0.fdl8d8I0UoDyWGDPK0VNUZBaEBQD4cz-ReowhbtxH0k";
 
-// Supabase config
+const API = `${SUPABASE_URL}/rest/v1`;
+
+// إعداد axios
+axios.defaults.headers.common['apikey'] = SUPABASE_KEY;
+axios.defaults.headers.common['Authorization'] = `Bearer ${SUPABASE_KEY}`;
 const SUPABASE_URL = "https://pntqobqhaggvcjtyspvb.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBudHFvYnFoYWdndmNqdHlzcHZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjYwNjQsImV4cCI6MjA5MTUwMjA2NH0.fdl8d8I0UoDyWGDPK0VNUZBaEBQD4cz-ReowhbtxH0k";
 
