@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import "/App.css"; // تأكد أن المسار هكذا وليس @/App.css
+import "App.css"; // تأكد أن المسار هكذا وليس @/App.css
 import axios from "axios";
 
 // بيانات سيرفرك أنت فقط
