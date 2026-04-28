@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import "@/App.css";
+import "./App.css"; // حذفنا رمز @
 import axios from "axios";
 
-const BACKEND_URL =  "https://pntqobqhaggvcjtyspvb.supabase.co";
-const API = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBudHFvYnFoYWdndmNqdHlzcHZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjYwNjQsImV4cCI6MjA5MTUwMjA2NH0.fdl8d8I0UoDyWGDPK0VNUZBaEBQD4cz-ReowhbtxH0k";
-
-// Supabase config
+// إعدادات Supabase الصحيحة
 const SUPABASE_URL = "https://pntqobqhaggvcjtyspvb.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBudHFvYnFoYWdndmNqdHlzcHZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjYwNjQsImV4cCI6MjA5MTUwMjA2NH0.fdl8d8I0UoDyWGDPK0VNUZBaEBQD4cz-ReowhbtxH0k";
 
+// تعريف الـ API بشكل صحيح للطلبات
+const API = `${SUPABASE_URL}/rest/v1`; 
+
+axios.defaults.headers.common['apikey'] = SUPABASE_KEY;
+axios.defaults.headers.common['Authorization'] = `Bearer ${SUPABASE_KEY}`;
 const CLICK_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3";
 
 function App() {
