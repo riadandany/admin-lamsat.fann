@@ -1,9 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import "@/App.css";
-import axios from "axios";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = "https://pntqobqhaggvcjtyspvb.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBudHFvYnFoYWdndmNqdHlzcHZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjYwNjQsImV4cCI6MjA5MTUwMjA2NH0.fdl8d8I0UoDyWGDPK0VNUZBaEBQD4cz-ReowhbtxH0k";
@@ -139,7 +134,9 @@ function App() {
     throw new Error('Upload failed');
   };
 
-  const fetchUpdates = async () => { try { const r = await axios.get(`${API}/updates`); setUpdates(r.data); } catch (e) {} };
+  const fetchUpdates = async () => { try { const r = await const { data, error } = await supabase
+  .from('updates')
+  .select('*'); setUpdates(r.data); } catch (e) {} };
   const fetchAnnouncements = async () => { try { const r = await axios.get(`${API}/announcements`); setAnnouncements(r.data); } catch (e) {} };
   const fetchWorks = async () => { try { const r = await supabaseFetch('images?select=*&order=created_at.desc'); setWorks(await r.json() || []); } catch (e) {} };
   const fetchSocialLinks = async () => { try { const r = await axios.get(`${API}/social-links`); setSocialLinks(r.data); } catch (e) {} };
@@ -157,10 +154,19 @@ function App() {
   }, [currentPage, isLoggedIn, adminTab]);
 
   const handleLogin = async () => {
-    playClick();
-    try {
-      const r = await axios.post(`${API}/auth/login`, { username, password });
-      if (r.data.success) { setIsLoggedIn(true); setShowLoginModal(false); setCurrentPage('admin'); showToast('مرحباً أيها المطور'); setUsername(''); setPassword(''); }
+  const { data, error } = await supabase
+    .from("admins")
+    .select("*")
+    .eq("username", username)
+    .eq("password", password)
+    .single();
+
+  if (data) {
+    setIsLoggedIn(true);
+  } else {
+    alert("Login failed");
+  }
+}; setShowLoginModal(false); setCurrentPage('admin'); showToast('مرحباً أيها المطور'); setUsername(''); setPassword(''); }
     } catch (e) { showToast('اسم المستخدم أو كلمة المرور خاطئة!'); }
   };
 
@@ -236,9 +242,17 @@ function App() {
   };
 
   // Updates CRUD
-  const createUpdate = async () => { playClick(); if (!newUpdate.version || !newUpdate.title) { showToast('أكمل البيانات'); return; } try { await axios.post(`${API}/updates`, newUpdate); showToast('تم إضافة التحديث'); setNewUpdate({ version: '', title: '', description: '' }); fetchUpdates(); } catch (e) { showToast('حدث خطأ'); } };
-  const updateUpdate = async () => { playClick(); if (!editingUpdate) return; try { await axios.put(`${API}/updates/${editingUpdate.id}`, editingUpdate); showToast('تم تحديث التحديث'); setEditingUpdate(null); fetchUpdates(); } catch (e) { showToast('حدث خطأ'); } };
-  const deleteUpdate = async (id) => { try { await axios.delete(`${API}/updates/${id}`); showToast('تم حذف التحديث'); fetchUpdates(); } catch (e) { showToast('حدث خطأ'); } };
+  const createUpdate = async () => { playClick(); if (!newUpdate.version || !newUpdate.title) { showToast('أكمل البيانات'); return; } try { await supabase
+  .from("updates")
+  .insert([newUpdate]); showToast('تم إضافة التحديث'); setNewUpdate({ version: '', title: '', description: '' }); fetchUpdates(); } catch (e) { showToast('حدث خطأ'); } };
+  const updateUpdate = async () => { playClick(); if (!editingUpdate) return; try { await supabase
+  .from("updates")
+  .update(updatedData)
+  .eq("id", updatedData.id); showToast('تم تحديث التحديث'); setEditingUpdate(null); fetchUpdates(); } catch (e) { showToast('حدث خطأ'); } };
+  const deleteUpdate = async (id) => { try { await supabase
+  .from("updates")
+  .delete()
+  .eq("id", id); showToast('تم حذف التحديث'); fetchUpdates(); } catch (e) { showToast('حدث خطأ'); } };
 
   // Announcements CRUD
   const createAnnouncement = async () => { playClick(); if (!newAnnouncement.title || !newAnnouncement.button_text) { showToast('أكمل البيانات'); return; } try { await axios.post(`${API}/announcements`, { ...newAnnouncement, is_active: true }); showToast('تم إضافة الإعلان'); setNewAnnouncement({ title: '', description: '', button_text: '', button_link: '' }); fetchAnnouncements(); } catch (e) { showToast('حدث خطأ'); } };
