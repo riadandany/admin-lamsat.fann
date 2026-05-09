@@ -599,7 +599,7 @@ function App() {
         {currentPage === 'orders' && (
           <section className="page active">
             <h2 className="section-header glow-text">الطلبات</h2>
-            <p className="hero-subtitle center-text">للحفاظ على خصوصية العميل — ابحث باسم العميل أو رقم هاتفه ثم اضغط زر البحث</p>
+            <p className="hero-subtitle center-text">جميع طلباتك</p>
 
             <div className="orders-search-bar enhanced">
               <i className="fas fa-search"></i>
